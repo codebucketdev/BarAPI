@@ -20,6 +20,7 @@ import de.codebucket.barapi.nms.FakeDragon;
 
 public class BarAPI extends JavaPlugin implements Listener 
 {
+	private static Integer ENTITY_ID = Integer.valueOf(6000);
 	private static HashMap<String, FakeDragon> players = new HashMap<String, FakeDragon>();
 	private static HashMap<String, Integer> timers = new HashMap<String, Integer>();
 
@@ -259,7 +260,7 @@ public class BarAPI extends JavaPlugin implements Listener
 
 	private static FakeDragon addDragon(Player player, String message) 
 	{
-		FakeDragon dragon = Util.newDragon(message, player.getLocation().add(0, -300, 0));
+		FakeDragon dragon = new FakeDragon(message, ENTITY_ID.intValue(), player.getLocation().add(0.0D, -300.0D, 0.0D));
 		Util.sendPacket(player, dragon.getSpawnPacket());
 		players.put(player.getName(), dragon);
 		return dragon;
@@ -267,7 +268,7 @@ public class BarAPI extends JavaPlugin implements Listener
 
 	private static FakeDragon addDragon(Player player, Location loc, String message) 
 	{
-		FakeDragon dragon = Util.newDragon(message, loc.add(0, -300, 0));
+		FakeDragon dragon = new FakeDragon(message, ENTITY_ID.intValue(), loc.add(0.0D, -300.0D, 0.0D));
 		Util.sendPacket(player, dragon.getSpawnPacket());
 		players.put(player.getName(), dragon);
 		return dragon;

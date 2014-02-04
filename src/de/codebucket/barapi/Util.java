@@ -6,72 +6,12 @@ import java.lang.reflect.Method;
 
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import de.codebucket.barapi.nms.FakeDragon;
-import de.codebucket.barapi.nms.v1_6;
-import de.codebucket.barapi.nms.v1_7;
-
 public class Util 
 {
-	public static boolean newProtocol = false;
-	public static String version;
-	public static Class<?> fakeDragonClass = v1_6.class;
-
-	static
-	{
-		String name = Bukkit.getServer().getClass().getPackage().getName();
-		String mcVersion = name.substring(name.lastIndexOf('.') + 1);
-		String[] versions = mcVersion.split("_");
-
-		if (versions[0].equals("v1") && Integer.parseInt(versions[1]) > 6) 
-		{
-			newProtocol = true;
-			fakeDragonClass = v1_7.class;
-		}
-
-		version = mcVersion + ".";
-	}
-
-	public static FakeDragon newDragon(String message, Location loc) 
-	{
-		FakeDragon fakeDragon = null;
-
-		try 
-		{
-			fakeDragon = (FakeDragon) fakeDragonClass.getConstructor(String.class, Location.class).newInstance(message, loc);
-		} 
-		catch (IllegalArgumentException e)
-		{
-			e.printStackTrace();
-		} 
-		catch (SecurityException e) 
-		{
-			e.printStackTrace();
-		}
-		catch (InstantiationException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) 
-		{
-			e.printStackTrace();
-		}
-		catch (InvocationTargetException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (NoSuchMethodException e) 
-		{
-			e.printStackTrace();
-		}
-
-		return fakeDragon;
-	}
-
 	// Reflection Util
 	public static void sendPacket(Player p, Object packet)
 	{
@@ -107,6 +47,8 @@ public class Util
 
 	public static Class<?> getCraftClass(String ClassName) 
 	{
+		String name = Bukkit.getServer().getClass().getPackage().getName();
+	    String version = name.substring(name.lastIndexOf('.') + 1) + ".";
 		String className = "net.minecraft.server." + version + ClassName;
 		Class<?> c = null;
 		try 
