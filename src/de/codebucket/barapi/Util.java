@@ -12,6 +12,23 @@ import org.bukkit.entity.Player;
 
 public class Util 
 {
+	public static boolean newProtocol = false;
+	public static String version;
+
+	static 
+	{
+		String name = Bukkit.getServer().getClass().getPackage().getName();
+		String mcVersion = name.substring(name.lastIndexOf('.') + 1);
+		String[] versions = mcVersion.split("_");
+
+		if (versions[0].equals("v1") && Integer.parseInt(versions[1]) > 6) 
+		{
+			newProtocol = true;
+		}
+
+		version = mcVersion + ".";
+	}
+	
 	// Reflection Util
 	public static void sendPacket(Player p, Object packet)
 	{
@@ -47,8 +64,6 @@ public class Util
 
 	public static Class<?> getCraftClass(String ClassName) 
 	{
-		String name = Bukkit.getServer().getClass().getPackage().getName();
-	    String version = name.substring(name.lastIndexOf('.') + 1) + ".";
 		String className = "net.minecraft.server." + version + ClassName;
 		Class<?> c = null;
 		try 
