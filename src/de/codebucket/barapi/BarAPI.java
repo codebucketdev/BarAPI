@@ -1,6 +1,8 @@
 package de.codebucket.barapi;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -13,6 +15,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -26,11 +29,36 @@ public class BarAPI extends JavaPlugin implements Listener
 
 	private static BarAPI plugin;
 
+	@Override
 	public void onEnable()
 	{
 		getServer().getPluginManager().registerEvents(this, this);
-		getLogger().info("Loaded");
+		getLogger().info("BarAPI sucessfully enabled!");
 		plugin = this;
+	}
+	
+	@Override
+	public void onDisable() 
+	{
+		for (Player player : plugin.getServer().getOnlinePlayers())
+		{
+			quit(player);
+		}
+		players.clear();
+
+		for (int timerID : timers.values()) 
+		{
+			Bukkit.getScheduler().cancelTask(timerID);
+		}
+		timers.clear();
+		
+		getLogger().info("Thank you for using BarAPI in these plugins:");
+		List<Plugin> plugins = new ArrayList<Plugin>();
+		for(Plugin p : Bukkit.getPluginManager().getPlugins())
+		{
+			plugins.add(p);
+		}
+		getLogger().info(getPlugins(plugins));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -158,6 +186,14 @@ public class BarAPI extends JavaPlugin implements Listener
 		sendDragon(dragon, player);
 	}
 	
+	public static void setMessage(String message, int seconds, float percent) 
+	{
+		for (Player player : Bukkit.getOnlinePlayers()) 
+		{
+			setMessage(player, message, seconds, percent);
+		}
+	}
+	
 	public static void setMessage(final Player player, String message, int seconds, float percent) 
 	{
 		Validate.isTrue(seconds >= 0, "Seconds must be above 1 but was: ", seconds);
@@ -272,5 +308,43 @@ public class BarAPI extends JavaPlugin implements Listener
 		Util.sendPacket(player, dragon.getSpawnPacket());
 		players.put(player.getName(), dragon);
 		return dragon;
+	}
+	
+	private String getPlugins(List<Plugin> plugins)
+	{
+		String pmsg = "";
+		for(Plugin p : plugins)
+		{
+			if(p.getDescription().getSoftDepend() != null)
+			{
+				if(p.getDescription().getSoftDepend().contains("BarAPI"))
+				{
+					if(pmsg.length() == 0)
+			    	{
+						pmsg = (pmsg + p.getDescription().getName());
+			    	}
+			    	else
+			    	{
+			    		pmsg = (pmsg + ", " + p.getDescription().getName());
+			    	}
+				}
+			}
+			else if(p.getDescription().getDepend() != null)
+			{
+				if(p.getDescription().getDepend().contains("BarAPI"))
+				{
+					if(pmsg.length() == 0)
+			    	{
+						pmsg = (pmsg + p.getDescription().getName());
+			    	}
+			    	else
+			    	{
+			    		pmsg = (pmsg + ", " + p.getDescription().getName());
+			    	}
+				}
+			}
+		}
+		
+		return pmsg;
 	}
 }
