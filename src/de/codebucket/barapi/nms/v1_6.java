@@ -7,58 +7,58 @@ import java.lang.reflect.Method;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
-import de.codebucket.barapi.Util;
+import de.codebucket.barapi.Utils;
 
 public class v1_6 
 {
 	@SuppressWarnings("deprecation")
 	public static Object getSpawnPacket(FakeDragon fd) 
 	{
-		Class<?> mob_class = Util.getCraftClass("Packet24MobSpawn");
+		Class<?> mob_class = Utils.getCraftClass("Packet24MobSpawn");
 		Object mobPacket = null;
 		try 
 		{
 			mobPacket = mob_class.newInstance();
 
-			Field a = Util.getField(mob_class, "a");
+			Field a = Utils.getField(mob_class, "a");
 			a.setAccessible(true);
 			a.set(mobPacket, Integer.valueOf(fd.EntityID));
-			Field b = Util.getField(mob_class, "b");
+			Field b = Utils.getField(mob_class, "b");
 			b.setAccessible(true);
 			b.set(mobPacket, Short.valueOf(EntityType.ENDER_DRAGON.getTypeId()));
 
-			Field c = Util.getField(mob_class, "c");
+			Field c = Utils.getField(mob_class, "c");
 			c.setAccessible(true);
 			c.set(mobPacket, Integer.valueOf(fd.x));
-			Field d = Util.getField(mob_class, "d");
+			Field d = Utils.getField(mob_class, "d");
 			d.setAccessible(true);
 			d.set(mobPacket, Integer.valueOf(fd.y));
-			Field e = Util.getField(mob_class, "e");
+			Field e = Utils.getField(mob_class, "e");
 			e.setAccessible(true);
 			e.set(mobPacket, Integer.valueOf(fd.z));
-			Field f = Util.getField(mob_class, "f");
+			Field f = Utils.getField(mob_class, "f");
 			f.setAccessible(true);
 			f.set(mobPacket, Byte.valueOf((byte) (int) (fd.pitch * 256.0F / 360.0F)));
-			Field g = Util.getField(mob_class, "g");
+			Field g = Utils.getField(mob_class, "g");
 			g.setAccessible(true);
 			g.set(mobPacket, Byte.valueOf((byte) (int) (fd.head_pitch * 256.0F / 360.0F)));
 
-			Field h = Util.getField(mob_class, "h");
+			Field h = Utils.getField(mob_class, "h");
 			h.setAccessible(true);
 			h.set(mobPacket,
 					Byte.valueOf((byte) (int) (fd.yaw * 256.0F / 360.0F)));
-			Field i = Util.getField(mob_class, "i");
+			Field i = Utils.getField(mob_class, "i");
 			i.setAccessible(true);
 			i.set(mobPacket, Byte.valueOf(fd.xvel));
-			Field j = Util.getField(mob_class, "j");
+			Field j = Utils.getField(mob_class, "j");
 			j.setAccessible(true);
 			j.set(mobPacket, Byte.valueOf(fd.yvel));
-			Field k = Util.getField(mob_class, "k");
+			Field k = Utils.getField(mob_class, "k");
 			k.setAccessible(true);
 			k.set(mobPacket, Byte.valueOf(fd.zvel));
 
 			Object watcher = getWatcher(fd);
-			Field t = Util.getField(mob_class, "t");
+			Field t = Utils.getField(mob_class, "t");
 			t.setAccessible(true);
 			t.set(mobPacket, watcher);
 		}
@@ -76,13 +76,13 @@ public class v1_6
 
 	public static Object getDestroyPacket(FakeDragon fd) 
 	{
-		Class<?> packet_class = Util.getCraftClass("Packet29DestroyEntity");
+		Class<?> packet_class = Utils.getCraftClass("Packet29DestroyEntity");
 		Object packet = null;
 		try
 		{
 			packet = packet_class.newInstance();
 
-			Field a = Util.getField(packet_class, "a");
+			Field a = Utils.getField(packet_class, "a");
 			a.setAccessible(true);
 			a.set(packet, new int[] { fd.EntityID });
 		} 
@@ -100,18 +100,18 @@ public class v1_6
 
 	public static Object getMetaPacket(FakeDragon fd, Object watcher) 
 	{
-		Class<?> packet_class = Util.getCraftClass("Packet40EntityMetadata");
+		Class<?> packet_class = Utils.getCraftClass("Packet40EntityMetadata");
 		Object packet = null;
 		try 
 		{
 			packet = packet_class.newInstance();
 
-			Field a = Util.getField(packet_class, "a");
+			Field a = Utils.getField(packet_class, "a");
 			a.setAccessible(true);
 			a.set(packet, Integer.valueOf(fd.EntityID));
 
-			Method watcher_c = Util.getMethod(watcher.getClass(), "c");
-			Field b = Util.getField(packet_class, "b");
+			Method watcher_c = Utils.getMethod(watcher.getClass(), "c");
+			Field b = Utils.getField(packet_class, "b");
 			b.setAccessible(true);
 			b.set(packet, watcher_c.invoke(watcher, new Object[0]));
 		} 
@@ -137,28 +137,28 @@ public class v1_6
 
 	public static Object getTeleportPacket(FakeDragon fd, Location loc) 
 	{
-		Class<?> packet_class = Util.getCraftClass("Packet34EntityTeleport");
+		Class<?> packet_class = Utils.getCraftClass("Packet34EntityTeleport");
 		Object packet = null;
 		try
 		{
 			packet = packet_class.newInstance();
 
-			Field a = Util.getField(packet_class, "a");
+			Field a = Utils.getField(packet_class, "a");
 			a.setAccessible(true);
 			a.set(packet, Integer.valueOf(fd.EntityID));
-			Field b = Util.getField(packet_class, "b");
+			Field b = Utils.getField(packet_class, "b");
 			b.setAccessible(true);
 			b.set(packet, Integer.valueOf((int) Math.floor(loc.getX() * 32.0D)));
-			Field c = Util.getField(packet_class, "c");
+			Field c = Utils.getField(packet_class, "c");
 			c.setAccessible(true);
 			c.set(packet, Integer.valueOf((int) Math.floor(loc.getY() * 32.0D)));
-			Field d = Util.getField(packet_class, "d");
+			Field d = Utils.getField(packet_class, "d");
 			d.setAccessible(true);
 			d.set(packet, Integer.valueOf((int) Math.floor(loc.getZ() * 32.0D)));
-			Field e = Util.getField(packet_class, "e");
+			Field e = Utils.getField(packet_class, "e");
 			e.setAccessible(true);
 			e.set(packet, Byte.valueOf((byte) (int) (loc.getYaw() * 256.0F / 360.0F)));
-			Field f = Util.getField(packet_class, "f");
+			Field f = Utils.getField(packet_class, "f");
 			f.setAccessible(true);
 			f.set(packet, Byte.valueOf((byte) (int) (loc.getPitch() * 256.0F / 360.0F)));
 		} 
@@ -175,13 +175,13 @@ public class v1_6
 
 	public static Object getRespawnPacket() 
 	{
-		Class<?> packet_class = Util.getCraftClass("Packet205ClientCommand");
+		Class<?> packet_class = Utils.getCraftClass("Packet205ClientCommand");
 		Object packet = null;
 		try 
 		{
 			packet = packet_class.newInstance();
 
-			Field a = Util.getField(packet_class, "a");
+			Field a = Utils.getField(packet_class, "a");
 			a.setAccessible(true);
 			a.set(packet, Integer.valueOf(1));
 		}
@@ -198,13 +198,13 @@ public class v1_6
 
 	public static Object getWatcher(FakeDragon fd) 
 	{
-		Class<?> watcher_class = Util.getCraftClass("DataWatcher");
+		Class<?> watcher_class = Utils.getCraftClass("DataWatcher");
 		Object watcher = null;
 		try 
 		{
 			watcher = watcher_class.newInstance();
 
-			Method a = Util.getMethod(watcher_class, "a", new Class[] { Integer.TYPE, Object.class });
+			Method a = Utils.getMethod(watcher_class, "a", new Class[] { Integer.TYPE, Object.class });
 			a.setAccessible(true);
 			a.invoke(watcher, new Object[] { Integer.valueOf(0), Byte.valueOf((byte) (fd.visible ? 0 : 32)) });
 			a.invoke(watcher, new Object[] { Integer.valueOf(6), Float.valueOf(fd.health) });

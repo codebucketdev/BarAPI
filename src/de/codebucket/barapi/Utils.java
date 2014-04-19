@@ -10,7 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-public class Util 
+public class Utils 
 {
 	public static boolean newProtocol = false;
 	public static String version;

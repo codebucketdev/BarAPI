@@ -3,7 +3,7 @@ package de.codebucket.barapi.nms;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import de.codebucket.barapi.Util;
+import de.codebucket.barapi.Utils;
 
 public class FakeDragon 
 {
@@ -50,36 +50,36 @@ public class FakeDragon
 		this.z = z;
 		this.health = health;
 		this.visible = visible;
-		this.world = Util.getHandle(world);
+		this.world = Utils.getHandle(world);
 	}
 
 	public Object getSpawnPacket() 
 	{
-		if(Util.newProtocol) return v1_7.getSpawnPacket(this);
+		if(Utils.newProtocol) return v1_7.getSpawnPacket(this);
 		else return v1_6.getSpawnPacket(this);
 	}
 
 	public Object getDestroyPacket() 
 	{
-		if(Util.newProtocol) return v1_7.getDestroyPacket(this);
+		if(Utils.newProtocol) return v1_7.getDestroyPacket(this);
 		else return v1_6.getDestroyPacket(this);
 	}
 
 	public Object getMetaPacket(Object watcher) 
 	{
-		if(Util.newProtocol) return v1_7.getMetaPacket(this, watcher);
+		if(Utils.newProtocol) return v1_7.getMetaPacket(this, watcher);
 		else return v1_6.getMetaPacket(this, watcher);
 	}
 
 	public Object getTeleportPacket(Location loc) 
 	{
-		if(Util.newProtocol) return v1_7.getTeleportPacket(this, loc);
+		if(Utils.newProtocol) return v1_7.getTeleportPacket(this, loc);
 		else return v1_6.getTeleportPacket(this, loc);
 	}
 
 	public Object getWatcher() 
 	{
-		if(Util.newProtocol) return v1_7.getWatcher(this);
+		if(Utils.newProtocol) return v1_7.getWatcher(this);
 		else return v1_6.getWatcher(this);
 	}
 }

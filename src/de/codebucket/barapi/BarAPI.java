@@ -97,7 +97,7 @@ public class BarAPI extends JavaPlugin implements Listener
 				FakeDragon oldDragon = getDragon(player, "");
 				float health = oldDragon.health;
 				String message = oldDragon.name;
-				Util.sendPacket(player, getDragon(player, "").getDestroyPacket());
+				Utils.sendPacket(player, getDragon(player, "").getDestroyPacket());
 				players.remove(player.getName());
 				FakeDragon dragon = addDragon(player, loc, message);
 				dragon.health = health;
@@ -234,7 +234,7 @@ public class BarAPI extends JavaPlugin implements Listener
 	public static void removeBar(Player player)
 	{
 		if (!hasBar(player)) return;
-		Util.sendPacket(player, getDragon(player, "").getDestroyPacket());
+		Utils.sendPacket(player, getDragon(player, "").getDestroyPacket());
 		players.remove(player.getName());
 		cancelTimer(player);
 	}
@@ -278,8 +278,8 @@ public class BarAPI extends JavaPlugin implements Listener
 
 	private static void sendDragon(FakeDragon dragon, Player player) 
 	{
-		Util.sendPacket(player, dragon.getMetaPacket(dragon.getWatcher()));
-		Util.sendPacket(player, dragon.getTeleportPacket(player.getLocation().add(0, -300, 0)));
+		Utils.sendPacket(player, dragon.getMetaPacket(dragon.getWatcher()));
+		Utils.sendPacket(player, dragon.getTeleportPacket(player.getLocation().add(0, -300, 0)));
 	}
 
 	private static FakeDragon getDragon(Player player, String message)
@@ -297,7 +297,7 @@ public class BarAPI extends JavaPlugin implements Listener
 	private static FakeDragon addDragon(Player player, String message) 
 	{
 		FakeDragon dragon = new FakeDragon(message, ENTITY_ID.intValue(), player.getLocation().add(0.0D, -300.0D, 0.0D));
-		Util.sendPacket(player, dragon.getSpawnPacket());
+		Utils.sendPacket(player, dragon.getSpawnPacket());
 		players.put(player.getName(), dragon);
 		return dragon;
 	}
@@ -305,7 +305,7 @@ public class BarAPI extends JavaPlugin implements Listener
 	private static FakeDragon addDragon(Player player, Location loc, String message) 
 	{
 		FakeDragon dragon = new FakeDragon(message, ENTITY_ID.intValue(), loc.add(0.0D, -300.0D, 0.0D));
-		Util.sendPacket(player, dragon.getSpawnPacket());
+		Utils.sendPacket(player, dragon.getSpawnPacket());
 		players.put(player.getName(), dragon);
 		return dragon;
 	}

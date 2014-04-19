@@ -6,41 +6,41 @@ import java.lang.reflect.Method;
 
 import org.bukkit.Location;
 
-import de.codebucket.barapi.Util;
+import de.codebucket.barapi.Utils;
 
 public class v1_7 
 {
 	
 	public static Object getSpawnPacket(FakeDragon fd) 
 	{
-		Class<?> Entity = Util.getCraftClass("Entity");
-		Class<?> EntityLiving = Util.getCraftClass("EntityLiving");
-		Class<?> EntityEnderDragon = Util.getCraftClass("EntityEnderDragon");
+		Class<?> Entity = Utils.getCraftClass("Entity");
+		Class<?> EntityLiving = Utils.getCraftClass("EntityLiving");
+		Class<?> EntityEnderDragon = Utils.getCraftClass("EntityEnderDragon");
 		Object packet = null;
 		try 
 		{
-			fd.dragon = EntityEnderDragon.getConstructor(new Class[] { Util.getCraftClass("World") }).newInstance(new Object[] { fd.world });
-			Method setLocation = Util.getMethod(EntityEnderDragon, "setLocation", new Class[] { Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE });
+			fd.dragon = EntityEnderDragon.getConstructor(new Class[] { Utils.getCraftClass("World") }).newInstance(new Object[] { fd.world });
+			Method setLocation = Utils.getMethod(EntityEnderDragon, "setLocation", new Class[] { Double.TYPE, Double.TYPE, Double.TYPE, Float.TYPE, Float.TYPE });
 			setLocation.invoke(fd.dragon, new Object[] { Integer.valueOf(fd.x), Integer.valueOf(fd.y), Integer.valueOf(fd.z), Integer.valueOf(fd.pitch), Integer.valueOf(fd.yaw) });
-			Method setInvisible = Util.getMethod(EntityEnderDragon, "setInvisible", new Class[] { Boolean.TYPE });
+			Method setInvisible = Utils.getMethod(EntityEnderDragon, "setInvisible", new Class[] { Boolean.TYPE });
 			setInvisible.invoke(fd.dragon, new Object[] { Boolean.valueOf(fd.visible) });
-			Method setCustomName = Util.getMethod(EntityEnderDragon, "setCustomName", new Class[] { String.class });
+			Method setCustomName = Utils.getMethod(EntityEnderDragon, "setCustomName", new Class[] { String.class });
 			setCustomName.invoke(fd.dragon, new Object[] { fd.name });
-			Method setHealth = Util.getMethod(EntityEnderDragon, "setHealth", new Class[] { Float.TYPE });
+			Method setHealth = Utils.getMethod(EntityEnderDragon, "setHealth", new Class[] { Float.TYPE });
 			setHealth.invoke(fd.dragon, new Object[] { Float.valueOf(fd.health) });
 
-			Field motX = Util.getField(Entity, "motX");
+			Field motX = Utils.getField(Entity, "motX");
 			motX.set(fd.dragon, Byte.valueOf(fd.xvel));
 
-			Field motY = Util.getField(Entity, "motX");
+			Field motY = Utils.getField(Entity, "motX");
 			motY.set(fd.dragon, Byte.valueOf(fd.yvel));
 
-			Field motZ = Util.getField(Entity, "motX");
+			Field motZ = Utils.getField(Entity, "motX");
 			motZ.set(fd.dragon, Byte.valueOf(fd.xvel));
 
-			Method getId = Util.getMethod(EntityEnderDragon, "getId", new Class[0]);
+			Method getId = Utils.getMethod(EntityEnderDragon, "getId", new Class[0]);
 			fd.EntityID = ((Integer) getId.invoke(fd.dragon, new Object[0])).intValue();
-			Class<?> PacketPlayOutSpawnEntityLiving = Util.getCraftClass("PacketPlayOutSpawnEntityLiving");
+			Class<?> PacketPlayOutSpawnEntityLiving = Utils.getCraftClass("PacketPlayOutSpawnEntityLiving");
 			packet = PacketPlayOutSpawnEntityLiving.getConstructor(new Class[] { EntityLiving }).newInstance(new Object[] { fd.dragon });
 		} 
 		catch (IllegalArgumentException e) 
@@ -73,7 +73,7 @@ public class v1_7
 
 	public static Object getDestroyPacket(FakeDragon fd) 
 	{
-		Class<?> PacketPlayOutEntityDestroy = Util.getCraftClass("PacketPlayOutEntityDestroy");
+		Class<?> PacketPlayOutEntityDestroy = Utils.getCraftClass("PacketPlayOutEntityDestroy");
 
 		Object packet = null;
 		try 
@@ -109,8 +109,8 @@ public class v1_7
 
 	public static Object getMetaPacket(FakeDragon fd, Object watcher) 
 	{
-		Class<?> DataWatcher = Util.getCraftClass("DataWatcher");
-		Class<?> PacketPlayOutEntityMetadata = Util.getCraftClass("PacketPlayOutEntityMetadata");
+		Class<?> DataWatcher = Utils.getCraftClass("DataWatcher");
+		Class<?> PacketPlayOutEntityMetadata = Utils.getCraftClass("PacketPlayOutEntityMetadata");
 
 		Object packet = null;
 		try 
@@ -147,7 +147,7 @@ public class v1_7
 
 	public static Object getTeleportPacket(FakeDragon fd, Location loc) 
 	{
-		Class<?> PacketPlayOutEntityTeleport = Util.getCraftClass("PacketPlayOutEntityTeleport");
+		Class<?> PacketPlayOutEntityTeleport = Utils.getCraftClass("PacketPlayOutEntityTeleport");
 
 		Object packet = null;
 		try 
@@ -190,14 +190,14 @@ public class v1_7
 
 	public static Object getWatcher(FakeDragon fd) 
 	{
-		Class<?> Entity = Util.getCraftClass("Entity");
-		Class<?> DataWatcher = Util.getCraftClass("DataWatcher");
+		Class<?> Entity = Utils.getCraftClass("Entity");
+		Class<?> DataWatcher = Utils.getCraftClass("DataWatcher");
 
 		Object watcher = null;
 		try 
 		{
 			watcher = DataWatcher.getConstructor(new Class[] { Entity }).newInstance(new Object[] { fd.dragon });
-			Method a = Util.getMethod(DataWatcher, "a", new Class[] { Integer.TYPE, Object.class });
+			Method a = Utils.getMethod(DataWatcher, "a", new Class[] { Integer.TYPE, Object.class });
 			a.invoke(watcher, new Object[] { Integer.valueOf(0), Byte.valueOf((byte) (fd.visible ? 0 : 32)) });
 			a.invoke(watcher, new Object[] { Integer.valueOf(6), Float.valueOf(fd.health) });
 			a.invoke(watcher, new Object[] { Integer.valueOf(7), Integer.valueOf(0) });
