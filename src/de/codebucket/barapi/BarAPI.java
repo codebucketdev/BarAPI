@@ -3,6 +3,7 @@ package de.codebucket.barapi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -24,8 +25,8 @@ import de.codebucket.barapi.nms.FakeDragon;
 public class BarAPI extends JavaPlugin implements Listener 
 {
 	private static Integer ENTITY_ID = Integer.valueOf(6000);
-	private static HashMap<String, FakeDragon> players = new HashMap<String, FakeDragon>();
-	private static HashMap<String, Integer> timers = new HashMap<String, Integer>();
+	private static HashMap<UUID, FakeDragon> players = new HashMap<UUID, FakeDragon>();
+	private static HashMap<UUID, Integer> timers = new HashMap<UUID, Integer>();
 
 	private static BarAPI plugin;
 
@@ -98,7 +99,7 @@ public class BarAPI extends JavaPlugin implements Listener
 				float health = oldDragon.health;
 				String message = oldDragon.name;
 				Utils.sendPacket(player, getDragon(player, "").getDestroyPacket());
-				players.remove(player.getName());
+				players.remove(player.getUniqueId());
 				FakeDragon dragon = addDragon(player, loc, message);
 				dragon.health = health;
 				sendDragon(dragon, player);
@@ -164,7 +165,7 @@ public class BarAPI extends JavaPlugin implements Listener
 		dragon.health = FakeDragon.MAX_HEALTH;
 		final float dragonHealthMinus = FakeDragon.MAX_HEALTH / seconds;
 		cancelTimer(player);
-		timers.put(player.getName(), Bukkit.getScheduler().runTaskTimer(plugin, new BukkitRunnable() 
+		timers.put(player.getUniqueId(), Bukkit.getScheduler().runTaskTimer(plugin, new BukkitRunnable() 
 		{
 			@Override
 			public void run()
@@ -204,7 +205,7 @@ public class BarAPI extends JavaPlugin implements Listener
 		dragon.health = health;
 		final float dragonHealthMinus = health / seconds;
 		cancelTimer(player);
-		timers.put(player.getName(), Bukkit.getScheduler().runTaskTimer(plugin, new BukkitRunnable() 
+		timers.put(player.getUniqueId(), Bukkit.getScheduler().runTaskTimer(plugin, new BukkitRunnable() 
 		{
 			@Override
 			public void run()
@@ -228,14 +229,14 @@ public class BarAPI extends JavaPlugin implements Listener
 
 	public static boolean hasBar(Player player) 
 	{
-		return players.get(player.getName()) != null;
+		return players.get(player.getUniqueId()) != null;
 	}
 
 	public static void removeBar(Player player)
 	{
 		if (!hasBar(player)) return;
 		Utils.sendPacket(player, getDragon(player, "").getDestroyPacket());
-		players.remove(player.getName());
+		players.remove(player.getUniqueId());
 		cancelTimer(player);
 	}
 
@@ -269,7 +270,7 @@ public class BarAPI extends JavaPlugin implements Listener
 
 	private static void cancelTimer(Player player) 
 	{
-		Integer timerID = timers.remove(player.getName());
+		Integer timerID = timers.remove(player.getUniqueId());
 		if (timerID != null) 
 		{
 			Bukkit.getScheduler().cancelTask(timerID);
@@ -286,7 +287,7 @@ public class BarAPI extends JavaPlugin implements Listener
 	{
 		if (hasBar(player)) 
 		{
-			return players.get(player.getName());
+			return players.get(player.getUniqueId());
 		} 
 		else
 		{
@@ -298,7 +299,7 @@ public class BarAPI extends JavaPlugin implements Listener
 	{
 		FakeDragon dragon = new FakeDragon(message, ENTITY_ID.intValue(), player.getLocation().add(0.0D, -300.0D, 0.0D));
 		Utils.sendPacket(player, dragon.getSpawnPacket());
-		players.put(player.getName(), dragon);
+		players.put(player.getUniqueId(), dragon);
 		return dragon;
 	}
 
@@ -306,7 +307,7 @@ public class BarAPI extends JavaPlugin implements Listener
 	{
 		FakeDragon dragon = new FakeDragon(message, ENTITY_ID.intValue(), loc.add(0.0D, -300.0D, 0.0D));
 		Utils.sendPacket(player, dragon.getSpawnPacket());
-		players.put(player.getName(), dragon);
+		players.put(player.getUniqueId(), dragon);
 		return dragon;
 	}
 	
